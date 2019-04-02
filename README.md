@@ -1,2 +1,2 @@
-# tkom-
-TKOM Course project - scripting language to process WWW websites.
+# TKOM - Język skryptowy służący do przetwarzania stron WWW
+#### Autor: Bartosz Cybulski
