@@ -1,6 +1,6 @@
 package Token;
 
-class Token {
+public class Token {
 
     private int beginIndex;
     private int endIndex;

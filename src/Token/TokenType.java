@@ -1,31 +1,15 @@
 package Token;
 
-enum TokenType {
+public enum TokenType {
     BlockComment,
     LineComment,
     WhiteSpace,
     Tab,
-    NewLine,
     OpenBracket,
-    CLoseBracket,
+    CloseBracket,
     OpenCurlyBracket,
     CloseCurlyBracket,
-    DoubleConstant,
-    IntConstant,
-    Plus,
-    Minus,
-    Multiply,
-    Devide,
-    Point,
-    Equal,
-    Assignment,
-    Greater,
-    Less,
-    Static,
-    Public,
-    Private,
-    Int,
-    Double,
+    Comma,
     Void,
     False,
     True,
@@ -38,12 +22,29 @@ enum TokenType {
     While,
     For,
     Semicolon,
-    Identifier,
-    Comma;
+    Colon,
+    Plus,
+    Minus,
+    Multiply,
+    Devide,
+    Point,
+    Equal,
+    Equalx2,
+    Differ,
+    Greater,
+    Less,
+    Static,
+    Public,
+    Private,
+    Int,
+    Double,
+    DoubleConstant,
+    IntConstant,
+    Identifier;
     //todo create more types
 
 
-    boolean isCommentOrWhiteSign(){
-        return this == BlockComment || this == LineComment || this == WhiteSpace || this == Tab;
+    public boolean isCommentOrWhiteSign(){
+        return this == BlockComment || this == LineComment || this == WhiteSpace || this == Tab ;
     }
 }
