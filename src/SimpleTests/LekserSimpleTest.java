@@ -10,7 +10,13 @@ public class LekserSimpleTest {
                 "lekser.convertTextToTokens(input);" +
                 "for(Token t : lekser.getTokens() ){" +
                 "            System.out.println(t);" +
-                "        }";
+                "        } String \"ddsadsa\"" +
+                "     SearchEngine," +
+                "    SearchResult," +
+                " SearchResults" +
+                "    Query," +
+                "    File," +
+                "    Keywords,";
 
         Lekser lekser = new Lekser();
         lekser.convertTextToTokens(input);

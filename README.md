@@ -17,4 +17,5 @@ Termin : 10.04.2019
 
 ### Źródła :
 - "Kompilatory. Reguły, metody i narzędzia" - D.Ullman
-- Wykłady z przedmiotu __TKOM__
+- Wykłady z przedmiotu __[TKOM]__
+- [EBNF Tutorial](https://tomassetti.me/ebnf/)
