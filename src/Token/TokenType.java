@@ -21,6 +21,7 @@ public enum TokenType {
     ELSE,
     WHILE,
     FOR,
+    CLONE,
     SEMICOLON,
     COLON,
     PLUS,
@@ -47,7 +48,7 @@ public enum TokenType {
     SEARCH_RESULTS,
     QUERY,
     FILE,
-    KEYWORDS,
+    KEYWORD,
     IDENTIFIER;
     //todo create more types
 

@@ -1,46 +1,48 @@
-Goal	=	MainClass, { ClassDeclaration }, EOF;
+FullFile ::= MainMethod (MethodDeclaration)* "EOF"
 
-MainClass	=	"class", Identifier, "{", "public", "static", "void", "main", "(", "String", "[", "]", Identifier, ")", "{", Statement, "}", "}";
+MainMethod ::= "void main" "("  ")" "{" (VariableDeclaration | Statement)* "}"
 
-ClassDeclaration	=	"class", Identifier, [ "extends", Identifier ], "{", { VarDeclaration }, { MethodDeclaration } "}";
+MethodDeclaration ::= Type Identifier "(" Type Identifier ("," Type Identifier)* ")" "{" (VariableDeclaration | Statement)* "return" Expression "}"
 
-VarDeclaration	=	Type, Identifier, ";";
+VariableDeclaration ::=  Type Identifier ("=" (Identifier | Expression | Digit*) )?";"
 
-MethodDeclaration	=	"public", Type, Identifier, "(", [ Type, Identifier, { ",", Type, Identifier }, ], ")", "{", { VarDeclaration }, { Statement }, "return", Expression, ";", "}";
 
-Type	=	"int", "[", "]"
-|	"boolean"
-|	"int"
-|   "String"
-|	Identifier
-;
+Statement ::= "{" Statement+ "}"
+             | "if" "(" Expression ")" Statement
+             | "if" "(" Expression ")" Statement ( "else if" "(" Expression ")" Statement)* "else" Statement
+             | "while" "(" Expression ")" Statement
+             | "print" "(" Expression ")"
+             | Identifier "=" Expression ";"
+             | Identifier "[" Expression "]" "=" Expression ";"
 
-Statement	=	"{", { Statement }, "}"
-|	"if", "(", Expression, ")", Statement
-|	"if", "(", Expression, ")", Statement, "else", Statement
-|	"while", "(", Expression, ")", Statement
-|	"print", "(" , Expression, ")", ";"
-|	Identifier, "=", Expression, ";"
-|	Identifier, "[", Expression, "]", "=", Expression, ";"
-;
+Expression ::= Expression ( BinaryOperator ) Expression
+             | Expression "[" Expression "]"
+             | Expression "." Identifier "(" Expression ("," Expression )* ")"
+             | Digit+
+             | "true" | "false"
+             | Identifier
+             | "new" Identifier "(" ")"
+             | "!" Expression
+             | "(" Expression ")"
 
-Expression	=	Expression , ( "&&" | "<" | "+" | "-" | "*" ) , Expression
-|	Expression, "[", Expression, "]"
-|	Expression, ".", "length"
-|	Expression, ".", Identifier, "(", [ Expression { ",", Expression } ], ")"
-|	IntegerLiteral
-|	"true"
-|	"false"
-|	Identifier
-|	"this"
-|	"new", "int", "[", Expression, "]"
-|	"new", Identifier ,"(" ,")"
-|	"!", Expression
-|	"(", Expression, ")"
-;
+Identifier ::= Character ( Character  | Digit | "_" )*
 
-Identifier	is	one or more letters, digits, and underscores, starting with a letter
+Type ::= "int" | "double" | "String" | "boolean" | "SearchEngine" | "SearchResult" | "SearchResults" | "Query" | "File" | "Keyword"
 
-IntegerLiteral	is	one or more decimal digits
+BinaryOperator ::= "+" | "-" | "*" | "/" |
+  "<" | "<=" | ">" | ">=" |
+  "==" | "!=" |
+  "&&" | "||"
 
-EOF	is	a distinguished token returned by the scanner at end-of-file
+UnaryOperator ::= "-" | "!"
+
+Character ::= "A" | "B" | "C" | "D" | "E" | "F" | "G"
+                  | "H" | "I" | "J" | "K" | "L" | "M" | "N"
+                  | "O" | "P" | "Q" | "R" | "S" | "T" | "U"
+                  | "V" | "W" | "X" | "Y" | "Z" |
+              "a" | "b" | "c" | "d" | "e" | "f" | "g"
+                  | "h" | "i" | "j" | "k" | "l" | "m" | "n"
+                  | "o" | "p" | "q" | "r" | "s" | "t" | "u"
+                  | "v" | "w" | "x" | "y" | "z"
+
+Digit ::= "0" |  "1" |  "2" |  "3" |  "4" | "5" | "6" | "7" |  "8"  | "9"

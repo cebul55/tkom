@@ -49,6 +49,7 @@ public class Lekser {
         regularExpression.put(TokenType.STATIC,"\\b(static)\\b.*");
         regularExpression.put(TokenType.PUBLIC,"\\b(public)\\b.*");
         regularExpression.put(TokenType.PRIVATE,"\\b(private)\\b.*");
+        regularExpression.put(TokenType.CLONE,"\\b(clone)\\b.*");
         regularExpression.put(TokenType.INT,"\\b(int)\\b.*");
         regularExpression.put(TokenType.INT_CONSTANT,"\\b(\\d{1,9})\\b.*");
         regularExpression.put(TokenType.DOUBLE,"\\b(double)\\b.*");
@@ -60,7 +61,7 @@ public class Lekser {
         regularExpression.put(TokenType.SEARCH_RESULTS ,"\\b(SearchResults)\\b.*");
         regularExpression.put(TokenType.QUERY ,"\\b(Query)\\b.*");
         regularExpression.put(TokenType.FILE ,"\\b(File)\\b.*");
-        regularExpression.put(TokenType.KEYWORDS ,"\\b(Keywords)\\b.*");
+        regularExpression.put(TokenType.KEYWORD,"\\b(Keywords)\\b.*");
         regularExpression.put(TokenType.POINT,"(\\.).*");
         regularExpression.put(TokenType.PLUS,"(\\+{1}).*");
         regularExpression.put(TokenType.MINUS,"(\\-{1}).*");
