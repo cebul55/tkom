@@ -17,17 +17,187 @@ public class Lekser {
     /** List of found tokens */
     private List<Token> tokenResultList;
 
-    public Lekser(){
+    private CustomScanner scanner;
+
+    public Lekser(String filePath){
         regularExpression = new HashMap<TokenType, String>();
         tokenResultList = new ArrayList<Token>();
-        setUpeRegEx();
+        scanner = new CustomScanner(filePath);
+        try {
+            this.convertFileToTokens();
+        } catch (AnalyzerException e) {
+            e.printStackTrace();
+        }
     }
 
+    public void convertFileToTokens() throws AnalyzerException{
+        int pos = 0;
+        int line = 0;
+        Token token = null;
+        do {
+            token = getSingleToken(pos, line);
+            if(token != null){
+                pos = scanner.getNumberOfChar();
+                line = scanner.getNumberOfLine();
+                tokenResultList.add(token);
+            }
+        } while (token != null);
+    }
+
+    private Token getSingleToken(int index, int line){
+        if(index < 0){
+            throw new IllegalArgumentException("Illegal index in the input stream.");
+        }
+        Token tmpToken = null;
+        TokenType tmpType = null;
+        StringBuilder tokenString = new StringBuilder();
+        char atom;
+        atom = scanner.nextChar();
+        switch (atom){
+            case ' ':{
+                tmpType = TokenType.WHITE_SPACE;
+                tokenString.append(atom);
+                break;
+            }
+            case '\t':{
+                tmpType = TokenType.TAB;
+                tokenString.append(atom);
+                break;
+            }
+            case '/':{
+                tokenString.append(atom);
+                atom = scanner.nextChar();
+                if( atom == '/'){
+                    tmpType = TokenType.LINE_COMMENT;
+                    while (atom != '\n'){
+                        tokenString.append(atom);
+                        atom = scanner.nextChar();
+                    }
+                }
+                else if(atom == '*'){
+                    tmpType = TokenType.BLOCK_COMMENT;
+                    tokenString.append(atom);
+                    atom = scanner.nextChar();
+                    char prev = atom;
+                    while ( prev != '*' && atom != '/'){
+                        tokenString.append(atom);
+                        prev = atom;
+                        atom = scanner.nextChar();
+                    }
+                }
+                else{
+                    tmpType = TokenType.DIVIDE;
+                }
+                break;
+            }
+            case '(':{
+                tmpType = TokenType.OPEN_BRACKET;
+                tokenString.append(atom);
+                break;
+            }
+            case ')':{
+                tmpType = TokenType.CLOSE_BRACKET;
+                tokenString.append(atom);
+                break;
+            }
+            case '{':{
+                tmpType = TokenType.OPEN_CURLY_BRACKET;
+                tokenString.append(atom);
+                break;
+            }
+            case '}':{
+                tmpType = TokenType.CLOSE_CURLY_BRACKET;
+                tokenString.append(atom);
+                break;
+            }
+            case ',':{
+                tmpType = TokenType.COMMA;
+                tokenString.append(atom);
+                break;
+            }
+            case ':':{
+                tmpType = TokenType.COLON;
+                tokenString.append(atom);
+                break;
+            }
+            case ';':{
+                tmpType = TokenType.SEMICOLON;
+                tokenString.append(atom);
+                break;
+            }
+            case '+':{
+                tmpType = TokenType.PLUS;
+                tokenString.append(atom);
+                break;
+            }
+            case '-':{
+                tmpType = TokenType.MINUS;
+                tokenString.append(atom);
+                break;
+            }
+            case '*':{
+                tmpType = TokenType.MULTIPLY;
+                tokenString.append(atom);
+                break;
+            }
+            case '.':{
+                tmpType = TokenType.POINT;
+                tokenString.append(atom);
+                break;
+            }
+            case '=':{
+                tmpType = TokenType.EQUAL;
+                tokenString.append(atom);
+                atom = scanner.nextChar();
+                if(atom == '='){
+                    tokenString.append(atom);
+                    tmpType = TokenType.EQUALX_2;
+                }//todo popraw =
+                break;
+            }
+            case '!':{
+                tmpType = TokenType.SCREAMER;
+                tokenString.append(atom);
+                atom = scanner.nextChar();
+                if(atom == '='){
+                    tmpType = TokenType.DIFFER;
+                    tokenString.append(atom);
+                }//todo popraw !=
+                break;
+            }
+            case (char)(-1):{
+                return null;
+            }
+            default:{
+                return new Token(0,index+1,0,0,TokenType.KEYWORD, "dsa");
+            }
+        }
+
+        tmpToken = new Token(index, scanner.getNumberOfChar(), scanner.getNumberOfLine(), tokenString.length(), tmpType, tokenString.toString());
+        return tmpToken;
+    }
+
+    public List<Token> getTokens() {
+        return tokenResultList;
+    }
+
+    public List<Token> getTokensWithoutWhiteSpaces() {
+        List<Token> filteredTokens = new ArrayList<Token>();
+        for(Token token : this.tokenResultList){
+            if ( !token.getTokenType().isCommentOrWhiteSign() ){
+                filteredTokens.add(token);
+            }
+        }
+        return filteredTokens;
+    }
+
+    /* Metody @Depracated zostały zastąpione metodami operującymi na pojedynczym odczytywanym znaku z pliku */
+    @Deprecated
     private void setUpeRegEx(){
         regularExpression.put(TokenType.BLOCK_COMMENT, "(/\\*.*?\\*/).*");
         regularExpression.put(TokenType.LINE_COMMENT, "(//(.*?)[\r$]?\n).*");
         regularExpression.put(TokenType.WHITE_SPACE, "( ).*");
-        regularExpression.put(TokenType.TAB, "(\\t).*");
+        //regularExpression.put(TokenType.TAB, "(\\t).*");
         regularExpression.put(TokenType.OPEN_BRACKET, "(\\().*");
         regularExpression.put(TokenType.CLOSE_BRACKET, "(\\)).*");
         regularExpression.put(TokenType.OPEN_CURLY_BRACKET, "(\\{).*");
@@ -66,7 +236,7 @@ public class Lekser {
         regularExpression.put(TokenType.PLUS,"(\\+{1}).*");
         regularExpression.put(TokenType.MINUS,"(\\-{1}).*");
         regularExpression.put(TokenType.MULTIPLY,"(\\*).*");
-        regularExpression.put(TokenType.DEVIDE,"(/).*");
+        regularExpression.put(TokenType.DIVIDE,"(/).*");
         regularExpression.put(TokenType.EQUAL,"(=).*");
         regularExpression.put(TokenType.EQUALX_2,"(==).*");
         regularExpression.put(TokenType.DIFFER,"(\\!=).*");
@@ -75,6 +245,7 @@ public class Lekser {
         regularExpression.put(TokenType.IDENTIFIER,"\\b([a-zA-Z]{1}[0-9a-zA-Z_]{0,31})\\b.*");
     }
 
+    @Deprecated
     private Token convertSingleToken(String source, int fromIndex){
         if( fromIndex < 0 || fromIndex >= source.length()){
             throw new IllegalArgumentException("Illegal index in the input stream.");
@@ -84,26 +255,15 @@ public class Lekser {
             Matcher m = pattern.matcher(source);
             if( m.matches()){
                 String lexem = m.group(1);
-                return new Token(fromIndex, fromIndex + lexem.length(), tokenType, lexem);
+                return new Token(fromIndex, fromIndex + lexem.length(), 0,0, tokenType, lexem);
             }
+            //todo wczytywanie po znaku
+            // expressiom logiczne wyrażenie
         }
         return null;
     }
 
-    public List<Token> getTokens() {
-        return tokenResultList;
-    }
-
-    public List<Token> getTokensWithoutWhiteSpaces() {
-        List<Token> filteredTokens = new ArrayList<Token>();
-        for(Token token : this.tokenResultList){
-            if ( !token.getTokenType().isCommentOrWhiteSign() ){
-                filteredTokens.add(token);
-            }
-        }
-        return filteredTokens;
-    }
-
+    @Deprecated
     public void convertTextToTokens(String source) throws AnalyzerException {
         int pos = 0;
         Token token = null;
