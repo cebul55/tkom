@@ -5,20 +5,19 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.util.Scanner;
-//todo change class def to package private
-public class CustomScanner {
+
+class CustomScanner {
     private String filePath;
     private File file;
     private FileReader reader;
     private int totalErrors = 0, errorsInLine = 0;
 
-    private int numberOfLine = 0;
+    private int numberOfLine = 1;
     private int numberOfChar = 0;
+    private char currentChar = '0';
 
 
-    public CustomScanner(String filePath) {
+    CustomScanner(String filePath) {
         this.filePath = filePath;
         file = new File(filePath);
         if(!file.canRead()){
@@ -33,7 +32,7 @@ public class CustomScanner {
         }
     }
 
-    public char nextChar(){
+    private char nextChar(){
         char nextChar;
             try{
                 nextChar = (char) reader.read();
@@ -52,11 +51,27 @@ public class CustomScanner {
         return (char)(-1) ;
     }
 
-    public int getNumberOfChar() {
+    char getChar(){
+        // check if currentChar is null
+        if(currentChar == '0'){
+            return nextChar();
+        }
+        else {
+            char tmp = currentChar;
+            currentChar = '0';
+            return tmp;
+        }
+    }
+
+    void setCurrentChar(char currentChar) {
+        this.currentChar = currentChar;
+    }
+
+    int getNumberOfChar() {
         return numberOfChar;
     }
 
-    public int getNumberOfLine() {
+    int getNumberOfLine() {
         return numberOfLine;
     }
 }

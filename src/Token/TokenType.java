@@ -5,6 +5,7 @@ public enum TokenType {
     LINE_COMMENT,
     TAB,
     WHITE_SPACE,
+    END_LINE,
     OPEN_BRACKET,
     CLOSE_BRACKET,
     OPEN_CURLY_BRACKET,
@@ -51,10 +52,8 @@ public enum TokenType {
     FILE,
     KEYWORD,
     IDENTIFIER;
-    //todo create more types
-
 
     public boolean isCommentOrWhiteSign(){
-        return this == BLOCK_COMMENT || this == LINE_COMMENT || this == WHITE_SPACE || this == TAB;
+        return this == BLOCK_COMMENT || this == LINE_COMMENT || this == WHITE_SPACE || this == TAB || this == END_LINE;
     }
 }

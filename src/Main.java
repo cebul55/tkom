@@ -8,6 +8,6 @@ public class Main {
     public static void main(String[] args) throws AnalyzerException {
 
         LekserSimpleTest lekserSimpleTest = new LekserSimpleTest();
-        lekserSimpleTest.runSimpleTest();
+        lekserSimpleTest.runSimpleTestNoWhiteSpaces();
     }
 }

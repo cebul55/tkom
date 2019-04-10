@@ -1,3 +1,17 @@
-.    //hjoio
-*+==+ =+ /* dsasd a */+
-!= +* !+*
+To jest testowy pl1k zawierajacy rozne tokeny:
+{ } ( )   + - //*;
+int zmiennaStaloPozycyjna = 123;
+double zmiennaZmiennoPozycyjna = 1.0;
+String ciag != "ciag znakow";
+if else {} return new class
+while()
+for()
+static private public
+SearchEngine
+SearchResult
+SearchResults
+Query
+File
+Keyword
+Po wpisaniu w dowolne miejsce np znaku zapytania otrzymamy blad leksera
+Po wpisaniu zmiennej dluzszej niz 32 znaki rowniez otrzymamy blad

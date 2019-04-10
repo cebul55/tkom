@@ -33,8 +33,8 @@ public class Token {
     @Override
     public String toString(){
         if(!this.tokenType.isCommentOrWhiteSign())
-            return tokenType + "  '" + tokenString + "' Line:"+ lineNumber  + "' [" + beginLineIndex + ";" + endLineIndex + "] ";
+            return tokenType  + "\tLine:"+ lineNumber  + "\t[BEG:" + beginLineIndex + ",LEN:" + lexemLength + "]" + "\t'" + tokenString + "'";
         else
-            return tokenType + " Line:"+ lineNumber  +"   [" + beginLineIndex + ";" + endLineIndex + "] ";
+            return tokenType + "\tLine:"+ lineNumber  +"\t[" + beginLineIndex + ";" + endLineIndex + "] ";
     }
 }
