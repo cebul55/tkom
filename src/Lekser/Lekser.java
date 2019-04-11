@@ -13,6 +13,8 @@ import java.util.regex.Pattern;
 public class Lekser {
     /** Mapping type of token to regular expression */
     private Map<TokenType, String> regularExpression;
+    private Map<String, TokenType> keyWords;
+
 
     /** List of found tokens */
     private List<Token> tokenResultList;
@@ -21,6 +23,8 @@ public class Lekser {
 
     public Lekser(String filePath){
         regularExpression = new HashMap<TokenType, String>();
+        keyWords = new HashMap<String, TokenType>();
+        this.setUpKeywords();
         tokenResultList = new ArrayList<Token>();
         scanner = new CustomScanner(filePath);
         this.convertFileToTokens();
@@ -47,61 +51,46 @@ public class Lekser {
         } while (token != null);
     }
 
-    private TokenType checkTokenType(String str){
-        switch (str){
-            case "static":
-                return TokenType.STATIC;
-            case "public":
-                return TokenType.PUBLIC;
-            case "private":
-                return TokenType.PRIVATE;
-            case "void":
-                return TokenType.VOID;
-            case "false":
-                return TokenType.FALSE;
-            case "true":
-                return TokenType.TRUE;
-            case "null":
-                return TokenType.NULL;
-            case "return":
-                return TokenType.RETURN;
-            case "new":
-                return TokenType.NEW;
-            case "class":
-                return TokenType.CLASS;
-            case "if":
-                return TokenType.IF;
-            case "else":
-                return TokenType.ELSE;
-            case "while":
-                return TokenType.WHILE;
-            case "for":
-                return TokenType.FOR;
-            case "clone":
-                return TokenType.CLONE;
-            case "int":
-                return TokenType.INT;
-            case "double":
-                return TokenType.DOUBLE;
-            case "String":
-                return TokenType.STRING;
-            case "SearchEngine":
-                return TokenType.SEARCH_ENGINE;
-            case "SearchResult":
-                return TokenType.SEARCH_RESULT;
-            case "SearchResults":
-                return TokenType.SEARCH_RESULTS;
-            case "Query":
-                return TokenType.QUERY;
-            case "File":
-                return TokenType.FILE;
-            case "Keyword":
-                return TokenType.KEYWORD;
-            default:
-                return TokenType.IDENTIFIER;
-        }
+    private void setUpKeywords(){
+        keyWords.put( "static", TokenType.STATIC);
+        keyWords.put("public", TokenType.PUBLIC);
+        keyWords.put("private", TokenType.PRIVATE );
+        keyWords.put("void", TokenType.VOID);
+        keyWords.put("false", TokenType.FALSE);
+        keyWords.put("true", TokenType.TRUE);
+        keyWords.put("null", TokenType.NULL);
+        keyWords.put("return", TokenType.RETURN);
+        keyWords.put("new", TokenType.NEW);
+        keyWords.put("class", TokenType.CLASS );
+        keyWords.put("if", TokenType.IF);
+        keyWords.put("else", TokenType.ELSE);
+        keyWords.put("while", TokenType.WHILE);
+        keyWords.put("for", TokenType.FOR);
+        keyWords.put("clone", TokenType.CLONE);
+        keyWords.put("int", TokenType.INT);
+        keyWords.put("double", TokenType.DOUBLE);
+        keyWords.put("String", TokenType.STRING);
+        keyWords.put("SearchEngine", TokenType.SEARCH_ENGINE);
+        keyWords.put("SearchResult", TokenType.SEARCH_RESULT);
+        keyWords.put("SearchResults", TokenType.SEARCH_RESULTS );
+        keyWords.put("Query", TokenType.QUERY);
+        keyWords.put("File", TokenType.FILE);
+        keyWords.put("Keyword", TokenType.KEYWORD);
     }
 
+    private TokenType checkTokenType(String str){
+        if(keyWords.get(str) != null){
+            return keyWords.get(str);
+        }
+        return TokenType.IDENTIFIER;
+    }
+
+    private char getNextCharFromScanner(){
+        if(scanner.getCurrentChar() != (char)(-1))
+            scanner.nextChar();
+        return scanner.getCurrentChar();
+
+    }
     private Token getSingleToken(int index, int line) throws AnalyzerException {
         if(index < 0){
             throw new IllegalArgumentException("Illegal index in the input stream.");
@@ -110,7 +99,8 @@ public class Lekser {
         TokenType tmpType = null;
         StringBuilder tokenString = new StringBuilder();
         char atom;
-        atom = scanner.getChar();
+        //Wywołanie metody zawsze musi się zakończyć pobraniem ostatniego znaku tokena i przestawieniem strumienia na znak kolejny
+        atom = scanner.getCurrentChar();
         int begCharAt = scanner.getNumberOfChar();
         int begCharLine = scanner.getNumberOfLine();
 
@@ -119,9 +109,8 @@ public class Lekser {
             tmpType = TokenType.IDENTIFIER;
             while (CharacterChecker.isAcceptableInIdentifier(atom)){
                 tokenString.append(atom);
-                atom = scanner.getChar();
+                atom = this.getNextCharFromScanner();
             }
-            scanner.setCurrentChar(atom);
             tmpType = checkTokenType(tokenString.toString());
             if(tokenString.toString().length() >= 32){
                 throw new AnalyzerException("Too long variable name in Line:" + begCharLine + " at position:" + begCharAt + ".\n", begCharAt, begCharLine);
@@ -131,55 +120,60 @@ public class Lekser {
             tmpType = TokenType.INT_CONSTANT;
             while (CharacterChecker.isNumeric(atom)){
                 tokenString.append(atom);
-                atom = scanner.getChar();
+                atom = this.getNextCharFromScanner();
             }
             if(CharacterChecker.isDot(atom)){
                 tmpType = TokenType.DOUBLE_CONSTANT;
                 tokenString.append(atom);
-                atom = scanner.getChar();
+                scanner.nextChar();
+                atom = scanner.getCurrentChar();
                 while (CharacterChecker.isNumeric(atom)){
                     tokenString.append(atom);
-                    atom = scanner.getChar();
+                    atom = this.getNextCharFromScanner();
                 }
             }
-            scanner.setCurrentChar(atom);
         }
         else {
             switch (atom) {
                 case ' ': {
                     tmpType = TokenType.WHITE_SPACE;
                     tokenString.append(atom);
+                    scanner.nextChar();
                     break;
                 }
                 case '\n': {
                     tmpType = TokenType.END_LINE;
                     tokenString.append(atom);
+                    scanner.nextChar();
                     break;
                 }
                 case '\t': {
                     tmpType = TokenType.TAB;
                     tokenString.append(atom);
+                    scanner.nextChar();
                     break;
                 }
                 case '/': {
                     tokenString.append(atom);
-                    atom = scanner.getChar();
+                    atom = this.getNextCharFromScanner();
                     if (atom == '/') {
                         tmpType = TokenType.LINE_COMMENT;
                         while (atom != '\n') {
                             tokenString.append(atom);
-                            atom = scanner.getChar();
+                            atom = this.getNextCharFromScanner();
+                            if(atom == (char)(-1)){
+                                throw new AnalyzerException("Comment not finished with '\\n'. Comment starts at:"+begCharAt+" Line:"+ begCharLine +".",begCharAt,begCharLine);
+                            }
                         }
-                        scanner.setCurrentChar(atom);
                     } else if (atom == '*') {
                         tmpType = TokenType.BLOCK_COMMENT;
                         tokenString.append(atom);
-                        atom = scanner.getChar();
+                        atom = this.getNextCharFromScanner();
                         char prev = atom;
                         while (prev != '*' && atom != '/') {
                             tokenString.append(atom);
                             prev = atom;
-                            atom = scanner.getChar();
+                            atom = this.getNextCharFromScanner();
                             if(atom == (char)(-1)){
                                 throw new AnalyzerException("Comment not finished with '*/'. Comment starts at:"+begCharAt+" Line:"+ begCharLine +".",begCharAt,begCharLine);
                             }
@@ -187,111 +181,122 @@ public class Lekser {
                         tokenString.append(atom);
                     } else {
                         tmpType = TokenType.DIVIDE;
-                        scanner.setCurrentChar(atom);
                     }
                     break;
                 }
                 case '\"':{
                     tmpType = TokenType.STRING_CONSTANT;
                     tokenString.append(atom);
-                    atom = scanner.getChar();
+                    atom = this.getNextCharFromScanner();
                     while (atom != '\"') {
                         tokenString.append(atom);
-                        atom = scanner.getChar();
+                        atom = this.getNextCharFromScanner();
                     }
                     tokenString.append(atom);
+                    scanner.nextChar();
                     break;
                 }
                 case '(': {
                     tmpType = TokenType.OPEN_BRACKET;
                     tokenString.append(atom);
+                    scanner.nextChar();
                     break;
                 }
                 case ')': {
                     tmpType = TokenType.CLOSE_BRACKET;
                     tokenString.append(atom);
+                    scanner.nextChar();
                     break;
                 }
                 case '{': {
                     tmpType = TokenType.OPEN_CURLY_BRACKET;
                     tokenString.append(atom);
+                    scanner.nextChar();
                     break;
                 }
                 case '}': {
                     tmpType = TokenType.CLOSE_CURLY_BRACKET;
                     tokenString.append(atom);
+                    scanner.nextChar();
                     break;
                 }
                 case ',': {
                     tmpType = TokenType.COMMA;
                     tokenString.append(atom);
+                    scanner.nextChar();
                     break;
                 }
                 case ':': {
                     tmpType = TokenType.COLON;
                     tokenString.append(atom);
+                    scanner.nextChar();
                     break;
                 }
                 case ';': {
                     tmpType = TokenType.SEMICOLON;
                     tokenString.append(atom);
+                    scanner.nextChar();
                     break;
                 }
                 case '+': {
                     tmpType = TokenType.PLUS;
                     tokenString.append(atom);
+                    scanner.nextChar();
                     break;
                 }
                 case '-': {
                     tmpType = TokenType.MINUS;
                     tokenString.append(atom);
+                    scanner.nextChar();
                     break;
                 }
                 case '*': {
                     tmpType = TokenType.MULTIPLY;
                     tokenString.append(atom);
+                    scanner.nextChar();
                     break;
                 }
                 case '.': {
                     tmpType = TokenType.POINT;
                     tokenString.append(atom);
+                    scanner.nextChar();
                     break;
                 }
                 case '<': {
                     tmpType = TokenType.GREATER;
                     tokenString.append(atom);
+                    scanner.nextChar();
                     break;
                 }
                 case '>': {
                     tmpType = TokenType.LESS;
                     tokenString.append(atom);
+                    scanner.nextChar();
                     break;
                 }
                 case '=': {
                     tmpType = TokenType.EQUAL;
                     tokenString.append(atom);
-                    atom = scanner.getChar();
+                    atom = this.getNextCharFromScanner();
                     if (atom == '=') {
                         tokenString.append(atom);
                         tmpType = TokenType.EQUALX_2;
-                    } else {
-                        scanner.setCurrentChar(atom);
+                        scanner.nextChar();
                     }
                     break;
                 }
                 case '!': {
                     tmpType = TokenType.SCREAMER;
                     tokenString.append(atom);
-                    atom = scanner.getChar();
+                    atom = this.getNextCharFromScanner();
                     if (atom == '=') {
                         tmpType = TokenType.DIFFER;
                         tokenString.append(atom);
-                    } else {
-                        scanner.setCurrentChar(atom);
+                        scanner.nextChar();
                     }
                     break;
                 }
-                case (char) (-1): {
+                case (char)(-1): {
                     return null;
                 }
                 default: {
@@ -325,7 +330,7 @@ public class Lekser {
         regularExpression.put(TokenType.BLOCK_COMMENT, "(/\\*.*?\\*/).*");
         regularExpression.put(TokenType.LINE_COMMENT, "(//(.*?)[\r$]?\n).*");
         regularExpression.put(TokenType.WHITE_SPACE, "( ).*");
-        //regularExpression.put(TokenType.TAB, "(\\t).*");
+        regularExpression.put(TokenType.TAB, "(\\t).*");
         regularExpression.put(TokenType.OPEN_BRACKET, "(\\().*");
         regularExpression.put(TokenType.CLOSE_BRACKET, "(\\)).*");
         regularExpression.put(TokenType.OPEN_CURLY_BRACKET, "(\\{).*");

@@ -32,7 +32,7 @@ class CustomScanner {
         }
     }
 
-    private char nextChar(){
+    void nextChar(){
         char nextChar;
             try{
                 nextChar = (char) reader.read();
@@ -43,24 +43,14 @@ class CustomScanner {
                 else {
                     numberOfChar++;
                 }
-                return nextChar;
+                currentChar = nextChar;
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
-
-        return (char)(-1) ;
     }
 
-    char getChar(){
-        // check if currentChar is null
-        if(currentChar == '0'){
-            return nextChar();
-        }
-        else {
-            char tmp = currentChar;
-            currentChar = '0';
-            return tmp;
-        }
+    char getCurrentChar(){
+        return currentChar;
     }
 
     void setCurrentChar(char currentChar) {

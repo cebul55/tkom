@@ -1,5 +1,5 @@
 To jest testowy pl1k zawierajacy rozne tokeny:
-{ } ( )   + - //*;
+{ } ( )   + - / *;
 int zmiennaStaloPozycyjna = 123;
 double zmiennaZmiennoPozycyjna = 1.0;
 String ciag != "ciag znakow";
@@ -13,5 +13,7 @@ SearchResults
 Query
 File
 Keyword
-Po wpisaniu w dowolne miejsce np znaku zapytania otrzymamy blad leksera
-Po wpisaniu zmiennej dluzszej niz 32 znaki rowniez otrzymamy blad
+/*Po wpisaniu w dowolne miejsce np znaku zapytania otrzymamy blad leksera*/
+Po wpisaniu zmiennej dluzszej niz 32 znaki rowniez otrzymamy
+//
+== dsaodsiajda /
