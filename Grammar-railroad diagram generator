@@ -27,7 +27,7 @@ Expression ::= Expression ( BinaryOperator ) Expression
 
 Identifier ::= Character ( Character  | Digit | "_" )*
 
-Type ::= "int" | "double" | "String" | "boolean" | "SearchEngine" | "SearchResult" | "SearchResults" | "Query" | "File" | "Keyword"
+Type ::= "void" | "int" | "double" | "String" | "boolean" | "SearchEngine" | "SearchResult" | "SearchResults" | "Query" | "File" | "Keyword"
 
 BinaryOperator ::= "+" | "-" | "*" | "/" |
   "<" | "<=" | ">" | ">=" |

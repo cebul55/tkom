@@ -1,0 +1,43 @@
+FullFile -> MainMethod [ Method ]*
+MainMethod -> void main { MethodBody }
+ClassDeclaration -> Modifiers class id { ClassBody } | EPSILON
+Modifiers -> AccessModifier StaticModifier
+AccessModifier -> public | private | EPSILON
+StaticModifier -> static | EPSILON
+ClassBody -> ClassMember ClassBody | EPSILON
+ClassMember -> Modifiers NextPartClassMember
+NextPartClassMember -> Type NextPartClassMember2 | void NextPartClassMember2
+Type -> id | PredefinedType
+PredefinedType ->   int | double | String 
+                  | boolean | SearchEngine | SearchResult 
+                  | SearchResults | Query | File | Keyword
+NextPartClassMember2 -> id MethodOrAttribute
+Method -> MethodContinue
+MethodOrAttribute -> MethodContinue | AttributeContinue
+MethodContinue -> ( MethodParams ) { MethodBody }
+MethodParams -> OneParam MethodParamsContinue | EPSILON
+OneParam -> Type id
+MethodParamsContinue -> , OneParam MethodParamsContinue | EPSILON
+AttributeContinue -> AssignAttribute NextAttribute
+AssignAttribute -> = Expression | EPSILON
+NextAttribute -> , id AttributeContinue | ;
+MethodBody -> Statement MethodBody | EPSILON
+Statement -> BlockDeclaration | Expression ;
+BlockDeclaration -> { MethodBody }
+Expression -> Term ExpressionOperation | null
+Term -> intConst | doubleConst | Variable | ( Expression ) | new id ( MethodValues ) Link
+ExpressionOperation -> ArithmeticOp Term ExpressionOperation | EPSILON
+Variable -> id FunctionExit Link
+Link -> . id FunctionExit Link | EPSILON
+FunctionExit -> ( MethodValues ) | id | EPSILON
+MethodValues -> Expression ValueContinue | EPSILON
+ValueContinue -> , Expression ValueContinue | EPSILON
+ArithmeticOp -> + | - | * | /
+Statement -> IfElseBlock | WhileBlock | ReturnBlock | VariableDeclaration
+IfElseBlock -> if ( BoolExpression ) { Statement } [ else { Statement } ]
+WhileBlock -> while ( BoolExpression ) { Statement }
+ReturnBlock -> return Expression ;
+VariableDeclaration -> PredefinedType id = Expression ;
+BoolExpression -> true | false | Expression CompareOp Expression | UnaryOp Expression
+CompareOp ->   < | <= | > | >= | == | != | && | ||
+UnaryOp -> - | !
