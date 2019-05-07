@@ -8,9 +8,7 @@ ClassBody -> ClassMember ClassBody | EPSILON
 ClassMember -> Modifiers NextPartClassMember
 NextPartClassMember -> Type NextPartClassMember2 | void NextPartClassMember2
 Type -> id | PredefinedType
-PredefinedType ->   int | double | String 
-                  | boolean | SearchEngine | SearchResult 
-                  | SearchResults | Query | File | Keyword
+PredefinedType ->   int | double | String | boolean | SearchEngine | SearchResult | SearchResults | Query | File | Keyword
 NextPartClassMember2 -> id MethodOrAttribute
 Method -> MethodContinue
 MethodOrAttribute -> MethodContinue | AttributeContinue
@@ -25,7 +23,7 @@ MethodBody -> Statement MethodBody | EPSILON
 Statement -> BlockDeclaration | Expression ;
 BlockDeclaration -> { MethodBody }
 Expression -> Term ExpressionOperation | null
-Term -> intConst | doubleConst | Variable | ( Expression ) | new id ( MethodValues ) Link
+Term -> intConst | doubleConst | stringConst | Variable | ( Expression ) | new id ( MethodValues ) Link
 ExpressionOperation -> ArithmeticOp Term ExpressionOperation | EPSILON
 Variable -> id FunctionExit Link
 Link -> . id FunctionExit Link | EPSILON

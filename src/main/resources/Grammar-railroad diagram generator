@@ -1,0 +1,48 @@
+FullFile ::= MainMethod (MethodDeclaration)* "EOF"
+
+MainMethod ::= "void main" "("  ")" "{" (VariableDeclaration | Statement)* "}"
+
+MethodDeclaration ::= Type Identifier "(" Type Identifier ("," Type Identifier)* ")" "{" (VariableDeclaration | Statement)* "return" Expression "}"
+
+VariableDeclaration ::=  Type Identifier ("=" (Identifier | Expression | Digit*) )?";"
+
+
+Statement ::= "{" Statement+ "}"
+             | "if" "(" Expression ")" Statement
+             | "if" "(" Expression ")" Statement ( "else if" "(" Expression ")" Statement)* "else" Statement
+             | "while" "(" Expression ")" Statement
+             | "print" "(" Expression ")"
+             | Identifier "=" Expression ";"
+             | Identifier "[" Expression "]" "=" Expression ";"
+
+Expression ::= Expression ( BinaryOperator ) Expression
+             | Expression "[" Expression "]"
+             | Expression "." Identifier "(" Expression ("," Expression )* ")"
+             | Digit+
+             | "true" | "false"
+             | Identifier
+             | "new" Identifier "(" ")"
+             | "!" Expression
+             | "(" Expression ")"
+
+Identifier ::= Character ( Character  | Digit | "_" )*
+
+Type ::= "void" | "int" | "double" | "String" | "boolean" | "SearchEngine" | "SearchResult" | "SearchResults" | "Query" | "File" | "Keyword"
+
+BinaryOperator ::= "+" | "-" | "*" | "/" |
+  "<" | "<=" | ">" | ">=" |
+  "==" | "!=" |
+  "&&" | "||"
+
+UnaryOperator ::= "-" | "!"
+
+Character ::= "A" | "B" | "C" | "D" | "E" | "F" | "G"
+                  | "H" | "I" | "J" | "K" | "L" | "M" | "N"
+                  | "O" | "P" | "Q" | "R" | "S" | "T" | "U"
+                  | "V" | "W" | "X" | "Y" | "Z" |
+              "a" | "b" | "c" | "d" | "e" | "f" | "g"
+                  | "h" | "i" | "j" | "k" | "l" | "m" | "n"
+                  | "o" | "p" | "q" | "r" | "s" | "t" | "u"
+                  | "v" | "w" | "x" | "y" | "z"
+
+Digit ::= "0" |  "1" |  "2" |  "3" |  "4" | "5" | "6" | "7" |  "8"  | "9"

@@ -1,19 +1,18 @@
-To jest testowy pl1k zawierajacy rozne tokeny:
-{ } ( )   + - / *;
-int zmiennaStaloPozycyjna = 123;
-double zmiennaZmiennoPozycyjna = 1.0;
-String ciag != "ciag znakow";
-if else {} return new class
-while()
-for()
-static private public
-SearchEngine
-SearchResult
-SearchResults
-Query
-File
-Keyword
-/*Po wpisaniu w dowolne miejsce np znaku zapytania otrzymamy blad leksera*/
-Po wpisaniu zmiennej dluzszej niz 32 znaki rowniez otrzymamy
-//
-== dsaodsiajda /
+void main(){
+    Class class1 = Class();
+
+    Query q1 = Query("Szukana fraza");
+    WebsiteWWW w1 = WebsiteWWW("http://portal.com");
+
+
+    SearchResult sr1;
+    if (w1.checkConnection()) {
+        sr1 = q1.searchIn( w1);
+        sr1.saveResultsToFile( "Nowyplik.txt");
+    }
+    else{
+        File f1 = File("NowyError.txt");
+        f1.writeText(w1.connectionStatus);
+        f1.close();
+    }
+}

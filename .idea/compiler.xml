@@ -20,7 +20,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="tkom" target="1.5" />
+      <module name="tkom" target="6" />
     </bytecodeTargetLevel>
   </component>
 </project>

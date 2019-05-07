@@ -1,7 +1,10 @@
 import Exceptions.AnalyzerException;
-import Lekser.Lekser;
+import Parser.Parser;
 import SimpleTests.LekserSimpleTest;
-import Token.Token;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.URL;
 
 public class Main {
 

@@ -20,6 +20,15 @@ Do wygenerowania diagramu wykorzystany został portal: [Railroad Diagram Generat
 Diagram:
 [diagram](diagram.xhtml)
 
+## 3. Analizator składniowy
+
+Termin 8.05.2019
+
+Klasa __Parser__ reprezentuje analizator składniowy zstępujący typu LL.
+W celu implementacji parsera, gramatyka została zmieniona na gramatykę LL(1).
+
+Gramatyka LL(1) zdefiniowana jest w pliku: [LL1-grammar.txt](src/main/resources/LL1-grammar)
+
 ### Źródła :
 - "Kompilatory. Reguły, metody i narzędzia" - D.Ullmanwas
 - Wykłady z przedmiotu __[TKOM]__
