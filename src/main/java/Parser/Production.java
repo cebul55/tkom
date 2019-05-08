@@ -6,7 +6,7 @@ import java.util.Arrays;
  * Class {@code Production} represents productions in context-free grammar.
  * Left side of productions always contain only one nonterminal symbol!
  */
-class Production {
+public class Production {
 
 
 

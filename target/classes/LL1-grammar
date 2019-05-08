@@ -1,5 +1,4 @@
-FullFile -> MainMethod [ Method ]*
-MainMethod -> void main { MethodBody }
+MainMethod -> void main ( ) { MethodBody }
 ClassDeclaration -> Modifiers class id { ClassBody } | EPSILON
 Modifiers -> AccessModifier StaticModifier
 AccessModifier -> public | private | EPSILON
@@ -8,7 +7,7 @@ ClassBody -> ClassMember ClassBody | EPSILON
 ClassMember -> Modifiers NextPartClassMember
 NextPartClassMember -> Type NextPartClassMember2 | void NextPartClassMember2
 Type -> id | PredefinedType
-PredefinedType ->   int | double | String | boolean | SearchEngine | SearchResult | SearchResults | Query | File | Keyword
+PredefinedType ->   int | double | String | boolean | SearchEngine | SearchResult | SearchResults | Query | File | Keyword | WebsiteWWW
 NextPartClassMember2 -> id MethodOrAttribute
 Method -> MethodContinue
 MethodOrAttribute -> MethodContinue | AttributeContinue
@@ -22,20 +21,20 @@ NextAttribute -> , id AttributeContinue | ;
 MethodBody -> Statement MethodBody | EPSILON
 Statement -> BlockDeclaration | Expression ;
 BlockDeclaration -> { MethodBody }
-Expression -> Term ExpressionOperation | null
-Term -> intConst | doubleConst | stringConst | Variable | ( Expression ) | new id ( MethodValues ) Link
+Expression -> Term ExpressionOperation | Definition | null | true | false
+Term -> intConst | doubleConst | stringConst | Variable | ( Expression ) | new Type ( MethodValues ) Link
 ExpressionOperation -> ArithmeticOp Term ExpressionOperation | EPSILON
 Variable -> id FunctionExit Link
 Link -> . id FunctionExit Link | EPSILON
 FunctionExit -> ( MethodValues ) | id | EPSILON
 MethodValues -> Expression ValueContinue | EPSILON
 ValueContinue -> , Expression ValueContinue | EPSILON
-ArithmeticOp -> + | - | * | /
+ArithmeticOp -> + | - | * | / | =
 Statement -> IfElseBlock | WhileBlock | ReturnBlock | VariableDeclaration
-IfElseBlock -> if ( BoolExpression ) { Statement } [ else { Statement } ]
+IfElseBlock -> if ( BoolExpression ) Statement else Statement
 WhileBlock -> while ( BoolExpression ) { Statement }
 ReturnBlock -> return Expression ;
-VariableDeclaration -> PredefinedType id = Expression ;
+VariableDeclaration -> PredefinedType id = Expression ; | PredefinedType id = new PredefinedType ( MethodValues ) ;
 BoolExpression -> true | false | Expression CompareOp Expression | UnaryOp Expression
 CompareOp ->   < | <= | > | >= | == | != | && | ||
 UnaryOp -> - | !

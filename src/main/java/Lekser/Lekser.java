@@ -98,9 +98,11 @@ public class Lekser {
         Token tmpToken = null;
         TokenType tmpType = null;
         StringBuilder tokenString = new StringBuilder();
-        char atom;
+        //char atom;
         //Wywołanie metody zawsze musi się zakończyć pobraniem ostatniego znaku tokena i przestawieniem strumienia na znak kolejny
-        atom = scanner.getCurrentChar();
+        if(index == 0)
+            scanner.nextChar();
+        char atom = scanner.getCurrentChar();
         int begCharAt = scanner.getNumberOfChar();
         int begCharLine = scanner.getNumberOfLine();
 

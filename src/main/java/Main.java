@@ -1,16 +1,15 @@
 import Exceptions.AnalyzerException;
-import Parser.Parser;
-import SimpleTests.LekserSimpleTest;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.net.URL;
+import SimpleExamples.LekserSimpleExample;
+import SimpleExamples.ParserSimpleExample;
 
 public class Main {
 
     public static void main(String[] args) throws AnalyzerException {
 
-        LekserSimpleTest lekserSimpleTest = new LekserSimpleTest();
-        lekserSimpleTest.runSimpleTestNoWhiteSpaces();
+        ParserSimpleExample parserSimpleExample = new ParserSimpleExample();
+        parserSimpleExample.runSimpleExampleParser();
+
+//        LekserSimpleExample lekserSimpleExample = new LekserSimpleExample();
+//        lekserSimpleExample.runSimpleTestNoWhiteSpaces();
     }
 }
