@@ -27,10 +27,27 @@ Termin 8.05.2019
 Klasa __Parser__ reprezentuje analizator składniowy zstępujący typu LL.
 W celu implementacji parsera, gramatyka została zmieniona na gramatykę LL(1).
 
-Gramatyka LL(1) zdefiniowana jest w pliku: [LL1-grammar.txt](src/main/resources/LL1-grammar)
+Gramatyka LL(1) zdefiniowana jest w pliku: [LL1-grammar.txt](src/main/resources/LL1-grammar).
+W przypadku kiedy gramatyka nie jest LL(1), program zakończy wywołanie błędem **StackOverflowError**.
+
+
+Przebieg parsera:
+- odczytanie pliku z gramatyką
+- wyliczenie zbiorów First() i Follow()
+- zbudowanie tablicy parsującej z wykorzystaniem funkcji First() i Follow()
+- pobranie wejścia jako listy tokenów
+- przeprowadzenie algorytmu parsowania
+
 
 ### Źródła :
 - "Kompilatory. Reguły, metody i narzędzia" - D.Ullmanwas
 - Wykłady z przedmiotu __[TKOM]__
 - [EBNF Tutorial](https://tomassetti.me/ebnf/)
 - [Railroad Diagram Generator](https://www.bottlecaps.de/rr/ui)
+
+        parseProductions(grammarFile);
+        calculateFirst();
+        calculateFollow();
+        buildParsingTable();
+        input = convertTokensToStack(tokenList);
+        performParsingAlgorithm();
