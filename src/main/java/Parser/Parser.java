@@ -61,6 +61,8 @@ public class Parser {
         return this.sequenceOfAppliedProducions;
     }
 
+    public List<Token> getTokenList() { return this.tokenList; }
+
     public void parse(File grammarFile, List<Token> tokenList) throws FileNotFoundException, AnalyzerException{
         parseProductions(grammarFile);
         calculateFirst();
@@ -68,13 +70,11 @@ public class Parser {
         buildParsingTable();
         input = convertTokensToStack(tokenList);
         performParsingAlgorithm();
+        //for testing purposes
+        SemanticTree tree = new SemanticTree(sequenceOfAppliedProducions, tokenList);
+        System.out.print(tree);
     }
 
-    public void parseForTesting(File grammarFile, List<Token> tokenList) throws FileNotFoundException, AnalyzerException{
-        parseProductions(grammarFile);
-        calculateFirst();
-        input = convertTokensToStack(tokenList);
-    }
 
     private void parseProductions(File grammarFile) throws FileNotFoundException {
         nameToSymbol.put("EPSILON", epsilon);
@@ -244,7 +244,7 @@ public class Parser {
     private void follow(NonTerminal symbol, Symbol caller, Map<SimpleEntry<Symbol,Symbol>, Boolean> callTable) {
         Boolean called = callTable.get(new SimpleEntry<Symbol, Symbol>(caller, symbol));
         if(called != null){
-            if(called == true)
+            if( called )
                 return;
             else
                 callTable.put(new SimpleEntry<Symbol, Symbol>(caller, symbol), true);

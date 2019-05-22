@@ -31,7 +31,7 @@ Gramatyka LL(1) zdefiniowana jest w pliku: [LL1-grammar.txt](src/main/resources/
 W przypadku kiedy gramatyka nie jest LL(1), program zakończy wywołanie błędem **StackOverflowError**.
 
 
-Przebieg parsera:
+Przebieg działania parsera:
 - odczytanie pliku z gramatyką
 - wyliczenie zbiorów First() i Follow()
 - zbudowanie tablicy parsującej z wykorzystaniem funkcji First() i Follow()
@@ -45,9 +45,3 @@ Przebieg parsera:
 - [EBNF Tutorial](https://tomassetti.me/ebnf/)
 - [Railroad Diagram Generator](https://www.bottlecaps.de/rr/ui)
 
-        parseProductions(grammarFile);
-        calculateFirst();
-        calculateFollow();
-        buildParsingTable();
-        input = convertTokensToStack(tokenList);
-        performParsingAlgorithm();
