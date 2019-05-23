@@ -2,8 +2,7 @@ package Parser;
 
 import Exceptions.AnalyzerException;
 import Token.Token;
-import sun.jvm.hotspot.debugger.cdbg.Sym;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import Token.TokenType;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -72,7 +71,8 @@ public class Parser {
         performParsingAlgorithm();
         //for testing purposes
         SemanticTree tree = new SemanticTree(sequenceOfAppliedProducions, tokenList);
-        System.out.print(tree);
+        Token t = new Token(11,11,3,2, TokenType.IDENTIFIER, "q1");
+
     }
 
 

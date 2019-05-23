@@ -9,6 +9,9 @@ class Node<T> {
     private Node parent;
     private Vector<Node> children = new Vector<Node>();
     private Symbol symbol;
+
+
+
     private Token token;
 
     Node(Node parent, Symbol symbol){
@@ -46,5 +49,9 @@ class Node<T> {
 
     public Symbol getSymbol(){
           return symbol;
+    }
+
+    public Token getToken() {
+        return token;
     }
 }

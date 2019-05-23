@@ -31,9 +31,7 @@ class SemanticTree {
     private Token getNextToken(){
         Token tmp = tokenList.get(iteratorTokens);
         iteratorTokens++;
-        if(iteratorTokens >= tokenList.size()){
-            System.out.print("dsaad");
-        }
+
         return tmp;
     }
 
@@ -59,5 +57,30 @@ class SemanticTree {
             }
 
         }
+    }
+
+    Node findNode(Token token){
+        Node currentNode = rootNode;
+        return findNode(token, currentNode);
+    }
+
+    private Node findNode(Token t, Node parent){
+        List<Node> children = parent.getChildren();
+        Node tmp;
+        if( parent.getSymbol().isTerminal() && parent.getSymbol().getName() != "EPSILON"){
+
+            if(parent.getToken().equals(t)){
+                return parent;
+            }
+        }
+        else {
+            for (Node c : children) {
+                tmp = findNode(t, c);
+                if(tmp != null){
+                    return tmp;
+                }
+            }
+        }
+        return null;
     }
 }

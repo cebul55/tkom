@@ -37,4 +37,15 @@ public class Token {
         else
             return tokenType + "\tLine:"+ lineNumber  +"\t[" + beginLineIndex + ";" + endLineIndex + "] ";
     }
+
+    @Override
+    public boolean equals(Object obj){
+        if(obj == this)
+            return true;
+
+        if(!(obj instanceof Token))
+            return false;
+
+        return (this.beginLineIndex == ((Token) obj).beginLineIndex && this.endLineIndex == ((Token) obj).endLineIndex && this.lineNumber == ((Token) obj).lineNumber && this.lexemLength == ((Token) obj).lexemLength && this.tokenType == ((Token) obj).tokenType && this.tokenString.equals(((Token) obj).tokenString));
+    }
 }
