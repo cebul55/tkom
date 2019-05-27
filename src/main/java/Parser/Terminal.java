@@ -3,7 +3,7 @@ package Parser;
 /**
  * The {@code Terminal} class represents a terminal grammar symbol.
  */
-class Terminal extends Symbol {
+public class Terminal extends Symbol {
 
     public Terminal(int code, String name){
         super(code, name);

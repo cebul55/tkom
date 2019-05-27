@@ -1,16 +1,14 @@
-package Parser;
+package SemanticAnalysis;
 
+import Parser.Symbol;
 import Token.Token;
-import javafx.util.Pair;
 
 import java.util.Vector;
 
-class Node<T> {
+class Node {
     private Node parent;
     private Vector<Node> children = new Vector<Node>();
     private Symbol symbol;
-
-
 
     private Token token;
 

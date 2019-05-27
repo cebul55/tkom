@@ -3,7 +3,7 @@ package Parser;
 /**
  * {@code NonTerminal} class represents nonterminal symbol.
  */
-class NonTerminal extends Symbol{
+public class NonTerminal extends Symbol{
 
     public NonTerminal(int code, String name) {
         super(code, name);

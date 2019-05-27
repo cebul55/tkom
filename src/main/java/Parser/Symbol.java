@@ -4,7 +4,7 @@ package Parser;
  * Abstract class {@code Symbol} that represents grammar symbol.
  */
 
-abstract class Symbol {
+abstract public class Symbol {
     private int code;
     private String name;
 

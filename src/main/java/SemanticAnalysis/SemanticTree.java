@@ -1,5 +1,7 @@
-package Parser;
+package SemanticAnalysis;
 
+import Parser.Production;
+import Parser.Symbol;
 import Token.Token;
 
 import java.util.ArrayList;
@@ -50,7 +52,7 @@ class SemanticTree {
                 nodeCount++;
             }
             else{
-//                tmpNode = new Node(parent, s);
+                tmpNode = new Node(parent, s);
                 parent.addChild(s);
                 nodeCount++;
                 this.addRightSideChildren(parent.getLastChild(), appliedProductions.get(iteratorProductions).getRightSide());

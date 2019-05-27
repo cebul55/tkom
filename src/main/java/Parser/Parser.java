@@ -70,8 +70,8 @@ public class Parser {
         input = convertTokensToStack(tokenList);
         performParsingAlgorithm();
         //for testing purposes
-        SemanticTree tree = new SemanticTree(sequenceOfAppliedProducions, tokenList);
-        Token t = new Token(11,11,3,2, TokenType.IDENTIFIER, "q1");
+//        SemanticTree tree = new SemanticTree(sequenceOfAppliedProducions, tokenList);
+//        Token t = new Token(11,11,3,2, TokenType.IDENTIFIER, "q1");
 
     }
 
@@ -371,7 +371,7 @@ public class Parser {
                     sequenceOfAppliedProducions.add(getPrediction((NonTerminal) stackTop, tableEntry));
                 }
                 else {
-                    Token currToken = tokenList.get(parsedTokenCount + 1);
+                    Token currToken = tokenList.get(parsedTokenCount - 1);
 //                    System.out.println("curr symbol: " + stackTop.getName() + "\n curr token: " + currToken.getTokenString() );
                     throw new AnalyzerException("Syntax error after token #" + parsedTokenCount + " " + currToken.getTokenString() + " in line: " + currToken.getLineNumber(), parsedTokenCount, currToken.getLineNumber());
                 }
