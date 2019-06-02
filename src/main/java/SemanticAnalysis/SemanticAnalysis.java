@@ -15,6 +15,6 @@ public class SemanticAnalysis {
     }
 
     private void setUpSymbolTable(){
-
+        symbolTable = semanticTree.setUpSymbolTable();
     }
 }

@@ -4,7 +4,6 @@ import Parser.Production;
 import Parser.Symbol;
 import Token.Token;
 
-import java.util.ArrayList;
 import java.util.List;
 
 class SemanticTree {
@@ -16,12 +15,16 @@ class SemanticTree {
     private List<Token> tokenList;
     private List<Production> appliedProductions;
 
+    //symbolTable
+    private SymbolTable symbolTable;
+
     SemanticTree(List<Production> appliedProductions, List<Token> tokenList){
         this.nodeCount = 0;
         this.iteratorTokens = 0;
         this.iteratorProductions = 0;
         this.tokenList = tokenList;
         this.appliedProductions = appliedProductions;
+        this.symbolTable = new SymbolTable();
         this.setUpSemanticTree();
     }
 
@@ -30,7 +33,7 @@ class SemanticTree {
         this.addRightSideChildren(rootNode, appliedProductions.get(iteratorProductions).getRightSide());
     }
 
-    private Token getNextToken(){
+    private Token getCurrToken(){
         Token tmp = tokenList.get(iteratorTokens);
         iteratorTokens++;
 
@@ -41,23 +44,37 @@ class SemanticTree {
         iteratorProductions++;
         Node tmpNode;
         for(Symbol s : rightSideOfProduction){
+            System.out.println(s.getName());
+
             if(s.isTerminal()){
-//                tmpNode = new Node(parent, s, this.getNextToken());
+//                tmpNode = new Node(parent, s, this.getCurrToken());
                 if(s.getName() == "EPSILON"){
                     parent.addChild(s);
                 }
                 else {
-                    parent.addChild(s, this.getNextToken());
+                    parent.addChild(s, this.getCurrToken());
                 }
                 nodeCount++;
             }
             else{
-                tmpNode = new Node(parent, s);
+//                tmpNode = new Node(parent, s);
                 parent.addChild(s);
                 nodeCount++;
                 this.addRightSideChildren(parent.getLastChild(), appliedProductions.get(iteratorProductions).getRightSide());
             }
 
+        }
+    }
+
+    SymbolTable setUpSymbolTable(){
+        return this.symbolTable;
+    }
+
+    private void constructSymbolTable(Node parent){
+        for(Node n : parent.getChildren()){
+            if(n.getSymbol().getName() == "VariableDeclaration"){
+
+            }
         }
     }
 

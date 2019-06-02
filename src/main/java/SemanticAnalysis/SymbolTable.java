@@ -8,7 +8,7 @@ import java.util.Iterator;
 public class SymbolTable<T> {
     private Deque<HashMap<String, T>> scopes;
 
-    private SymbolTable(){
+    public SymbolTable(){
         this.scopes = new ArrayDeque<HashMap<String, T>>();
     }
 

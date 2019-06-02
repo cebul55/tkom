@@ -7,6 +7,7 @@ public class WebsiteWWW {
     }
 
     public boolean checkConnection(){
+        System.out.println("Invoke WebsiteWWW.checkConnection()");
         return true;
     }
 }
