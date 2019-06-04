@@ -2,7 +2,11 @@ package WebsiteSearch;
 
 public class WebsiteWWW {
 
-    WebsiteWWW() {
+    public WebsiteWWW() {
+
+    }
+
+    public WebsiteWWW(String address) {
 
     }
 

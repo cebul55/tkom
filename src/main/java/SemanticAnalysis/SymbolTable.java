@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class SymbolTable<T> {
-    private Deque<HashMap<String, T>> scopes;
+    private Deque< HashMap<String, T>> scopes;
 
     public SymbolTable(){
         this.scopes = new ArrayDeque<HashMap<String, T>>();
@@ -57,5 +57,15 @@ public class SymbolTable<T> {
 
     public T probe(String id) {
         return scopes.peek().get(id);
+    }
+
+    @Override
+    public String toString(){
+        Iterator<HashMap<String, T>> i = scopes.iterator();
+        while(i.hasNext()) {
+            HashMap<String, T> symTable = i.next();
+            System.out.println(symTable);
+        }
+        return "String";
     }
 }

@@ -21,7 +21,7 @@ NextAttribute -> , id AttributeContinue | ;
 MethodBody -> Statement MethodBody | EPSILON
 Statement -> BlockDeclaration | Expression ;
 BlockDeclaration -> { MethodBody }
-Expression -> Term ExpressionOperation | Definition | null | true | false
+Expression -> Term ExpressionOperation | null | true | false
 Term -> intConst | doubleConst | stringConst | Variable | ( Expression ) | new Type ( MethodValues ) Link
 ExpressionOperation -> ArithmeticOp Term ExpressionOperation | EPSILON
 Variable -> id FunctionExit Link
@@ -34,7 +34,7 @@ Statement -> IfElseBlock | WhileBlock | ReturnBlock | VariableDeclaration
 IfElseBlock -> if ( BoolExpression ) Statement else Statement
 WhileBlock -> while ( BoolExpression ) { Statement }
 ReturnBlock -> return Expression ;
-VariableDeclaration -> PredefinedType id = Expression ; | PredefinedType id = new PredefinedType ( MethodValues ) ;
+VariableDeclaration ->  PredefinedType id = new PredefinedType ( MethodValues ) ; | PredefinedType id = Expression ;
 BoolExpression -> true | false | Expression CompareOp Expression | UnaryOp Expression
-CompareOp ->   < | <= | > | >= | == | != | && | ||
+CompareOp ->   < | <= | > | >= | == | !=
 UnaryOp -> - | !

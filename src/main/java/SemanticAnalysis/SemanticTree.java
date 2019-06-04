@@ -1,9 +1,14 @@
 package SemanticAnalysis;
 
+import Exceptions.AnalyzerException;
 import Parser.Production;
 import Parser.Symbol;
 import Token.Token;
+import Token.TokenType;
 
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 class SemanticTree {
@@ -15,8 +20,9 @@ class SemanticTree {
     private List<Token> tokenList;
     private List<Production> appliedProductions;
 
-    //symbolTable
     private SymbolTable symbolTable;
+
+
 
     SemanticTree(List<Production> appliedProductions, List<Token> tokenList){
         this.nodeCount = 0;
@@ -24,8 +30,11 @@ class SemanticTree {
         this.iteratorProductions = 0;
         this.tokenList = tokenList;
         this.appliedProductions = appliedProductions;
-        this.symbolTable = new SymbolTable();
+        symbolTable = new SymbolTable();
+        symbolTable.enterScope();
         this.setUpSemanticTree();
+        this.constructSymbolTables(rootNode);
+        symbolTable.toString();
     }
 
     private void setUpSemanticTree(){
@@ -66,40 +75,103 @@ class SemanticTree {
         }
     }
 
-    SymbolTable setUpSymbolTable(){
-        return this.symbolTable;
-    }
+    private void addSymbolToTable(Node parent){
+        String className = ((VariableDeclarationNode)parent).getPredefinedTypeNode().getLastChild().getToken().getTokenString();
+        if( Character.isUpperCase(className.charAt(0)) && !className.equals("String")) {
+            className = "WebsiteSearch." + className;
+            Class<?> c = null;
+            try {
+                c = Class.forName(className);
+                Constructor<?> cons = c.getConstructor();
+                Object object = cons.newInstance();
+                symbolTable.defineOrSet(((VariableDeclarationNode)parent).getIdNode().getToken().getTokenString(), object);
 
-    private void constructSymbolTable(Node parent){
-        for(Node n : parent.getChildren()){
-            if(n.getSymbol().getName() == "VariableDeclaration"){
-
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
             }
         }
-    }
+        else if(className.equals("int")){
+            int intValue = Integer.parseInt(((VariableDeclarationNode)parent).getExpressionNode().getChildren().get(0).getLastChild().getToken().getTokenString());
+            symbolTable.defineOrSet(((VariableDeclarationNode)parent).getIdNode().getToken().getTokenString(), intValue);
 
-    Node findNode(Token token){
-        Node currentNode = rootNode;
-        return findNode(token, currentNode);
-    }
-
-    private Node findNode(Token t, Node parent){
-        List<Node> children = parent.getChildren();
-        Node tmp;
-        if( parent.getSymbol().isTerminal() && parent.getSymbol().getName() != "EPSILON"){
-
-            if(parent.getToken().equals(t)){
-                return parent;
-            }
         }
-        else {
-            for (Node c : children) {
-                tmp = findNode(t, c);
-                if(tmp != null){
-                    return tmp;
+        else if(className.equals("String")){
+            String stringValue = ((VariableDeclarationNode)parent).getExpressionNode().getChildren().get(0).getLastChild().getToken().getTokenString();
+            symbolTable.defineOrSet(((VariableDeclarationNode)parent).getIdNode().getToken().getTokenString(), stringValue);
+
+        }
+
+
+    }
+
+    private void constructSymbolTables(Node parent){
+        String currentSymbolName = parent.getSymbol().getName();
+        String className;
+        if( currentSymbolName.equals("VariableDeclaration") ){
+            if( ((VariableDeclarationNode)parent).isNewDeclaration()){
+                if(((VariableDeclarationNode)parent).getPredefinedTypeNode().getToken().equals(((VariableDeclarationNode)parent).getPredefinedType2Node().getToken())){
+                    addSymbolToTable(parent);
+
                 }
+                else{
+                    try {
+                        throw new AnalyzerException("Type mismatch at: line: ", ((VariableDeclarationNode)parent).getPredefinedTypeNode().getToken().getLineNumber(), ((VariableDeclarationNode)parent).getPredefinedTypeNode().getToken().getBeginIndex());
+                    } catch (AnalyzerException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                constructSymbolTables(((VariableDeclarationNode)parent).getMethodValuesNode());
+            }
+            else{
+                addSymbolToTable(parent);
+
+                constructSymbolTables(((VariableDeclarationNode)parent).getExpressionNode());
+
             }
         }
-        return null;
+        else if(currentSymbolName.equals("WhileBlock")){
+            constructSymbolTables(((WhileNode)parent).getBoolExpression());
+            symbolTable.enterScope();
+            constructSymbolTables(((WhileNode)parent).getStatementExpression());
+            symbolTable.exitScope();
+        }
+        else if(currentSymbolName.equals("IfElseBlock")){
+            constructSymbolTables(((IfElseNode)parent).getBoolExpression());
+
+            symbolTable.enterScope();
+            constructSymbolTables(((IfElseNode)parent).getIfStatement());
+            symbolTable.exitScope();
+
+            symbolTable.enterScope();
+            constructSymbolTables(((IfElseNode)parent).getElseStatement());
+            symbolTable.exitScope();
+        }
+        else{
+            for(Node n: parent.getChildren()){
+                if( n.getToken() != null && n.getSymbol().getName().equals("id") ) {
+                    String id = n.getToken().getTokenString();
+                    if ( id.equals("main") ){
+                        symbolTable.enterScope();
+                    }
+                    else if(symbolTable.lookup(id) == null && !n.getParent().getSymbol().getName().equals("Link")) {
+//                        symbolTable.defineOrSet(id, "");
+
+                            throw new IllegalArgumentException("Symbol " + id + " does not exist in any scope");
+                    }
+                }
+                 constructSymbolTables(n);
+            }
+        }
+
     }
+
 }

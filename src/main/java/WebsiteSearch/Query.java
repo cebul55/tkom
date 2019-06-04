@@ -10,6 +10,12 @@ public class Query {
         keywordhMap = new HashMap<Keyword, Integer>();
     }
 
+    public Query(String keyword) {
+        keywordhMap = new HashMap<Keyword, Integer>();
+        Keyword k = new Keyword(keyword);
+        keywordhMap.put(k, 10);
+    }
+
     public SearchResult searchIn(WebsiteWWW w){
         System.out.println("Invoke Query.searchIn()");
         return new SearchResult();

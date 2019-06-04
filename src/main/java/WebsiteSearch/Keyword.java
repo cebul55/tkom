@@ -7,6 +7,9 @@ public class Keyword {
 
     public Keyword(){};
 
+    public Keyword(String keyword) {
+    }
+
     public void setImportance(int importance){
         System.out.println("Keyword.setIMportance");
         this.importance = importance;

@@ -7,6 +7,7 @@ public class File {
     private boolean isOpened;
 
     public File(){}
+    public File(String name){}
 
     public void writeText(String text){
         System.out.println("Invoke File.writeText()");
